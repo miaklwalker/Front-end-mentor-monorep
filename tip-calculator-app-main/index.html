@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <title>Frontend Mentor | Tip calculator app</title>
+
+  <style>
+    :root{
+      --mobile:375px;
+      --desktop:1440px;
+      --strong-cyan:hsl(172,67%,45%);
+      --very-dark-cyan: hsl(183, 100%, 15%);
+      --dark-grayish-cyan: hsl(186, 14%, 43%);
+      --dark-grayish-cyan-two: hsl(184, 14%, 56%);
+      --light-grayish-cyan: hsl(185, 41%, 84%);
+      --light-grayish-cyan-two: hsl(189, 41%, 97%);
+      --danger-orange:rgb(181,124,109);
+      --white: hsl(0, 0%, 100%);
+      --font-size-forms:24px;
+    }
+    body{
+      display: flex;
+      flex-direction: column;
+      place-items: center center;
+      justify-content: space-evenly;
+      height: 100vh;
+    }
+    body:last-child{
+      justify-self: flex-end;
+    }
+    *{
+      font-family: 'Space Mono', monospace;
+      margin:0;
+      padding:0;
+    }
+    body{
+      background-color: var(--light-grayish-cyan);
+    }
+    header{
+      text-align: center;
+      text-transform: uppercase;
+      line-height: 1.2;
+      letter-spacing: .5rem;
+      /* margin: clamp(15px, 3%, 50px); */
+      color: var(--very-dark-cyan);
+      font-weight: 500;
+      font-size: .6rem;
+    }
+    .container{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      background-color: var(--white);
+      box-sizing: border-box;
+      height: auto;
+      border-radius: 20px;
+      padding: 2% 2%;
+      max-width: 720px;
+      min-height:400px;
+      box-shadow: 2px 2px 9px var(--dark-grayish-cyan);
+    }
+    label{
+      display: block;
+      color: var(--very-dark-cyan);
+      font-size:.8rem ;
+      font-weight: 700;
+    }
+    #bill{
+      background-image: url("images/icon-dollar.svg");
+    }
+    #people{
+      background-image: url("images/icon-person.svg");
+    }
+    input{
+      background-repeat: no-repeat;
+      background-position: 5% 50%;
+      text-align: right;
+      border: none;
+      background-color: var(--light-grayish-cyan-two);
+      color:var(--very-dark-cyan);
+      width: 100%;
+      border-radius: 3%;
+      padding-right:5%;
+      font-size: var(--font-size-forms);
+    }
+    .tip-percentage-container{
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:2vh;
+    }
+    .tip-percentage-container div {
+      font-size: var(--font-size-forms);
+      background-color: var(--very-dark-cyan);
+      color:var(--white);
+      text-align: center;
+      padding: 5% 0;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+    .tip-percentage-container div.active{
+      color: var(--very-dark-cyan);
+      background-color: var(--strong-cyan);
+    }
+    .tip-percentage-container input:last-child{
+      background-color: var(--light-grayish-cyan-two);
+      color: var(--dark-grayish-cyan);
+    }
+    .tip-percentage-container input:last-child::placeholder{
+      text-align: center;
+    }
+    .output-container{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 60% 1fr;
+      padding:5% 5%;
+      height: 80%;
+      row-gap: 0;
+      width: 80%;
+      border-radius:15px ;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--very-dark-cyan);
+      text-align: right;
+      color: var(--strong-cyan);
+      font-size: 36px;
+    }
+    .output-container .sub-container{
+      text-align: left;
+      color: var(--white);
+      font-size: .8rem;
+    }
+    .input{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      margin-right: 5%;
+      max-width: 50%;
+    }
+    .output{
+      font-weight: 900;
+    }
+    small{
+      display: block;
+      color: var(--dark-grayish-cyan-two);
+    }
+    button{
+      grid-column: 1 / span 2;
+      text-transform: uppercase;
+      background-color: var(--strong-cyan);
+      border-radius:7px ;
+      line-height: 0;
+      border:none;
+      font-size: 1.2rem;
+      font-weight: 900;
+      letter-spacing: 1.6px;
+      color:var(--very-dark-cyan);
+      height:70%;
+    }
+    button:disabled{
+      background-color: var(--dark-grayish-cyan);
+      color: var(--dark-grayish-cyan-two);
+    }
+    input:focus{
+      outline: none !important;
+      border:var(--strong-cyan) 2px solid;
+      border-radius: 7px;
+    }
+    .tip-percentage-container div{
+      transition: color .5s ease , background-color .5s ease;
+    }
+    .tip-percentage-container div:hover{
+      color: var(--very-dark-cyan);
+      background-color: var(--strong-cyan);
+    }
+    #people-container label{
+      display: inline;
+    }
+    #people-container span:not(.error){
+      display: none;
+    }
+    .error:not(input,label){
+      color:var(--danger-orange);
+      font-size:.7rem;
+      text-align: right;
+      margin-left: 15%;
+    }
+    input.error{
+      border: 2px solid var(--danger-orange)
+    }
+
+    @media screen and (max-width:375px) {
+      .container{
+        flex-direction: column;
+        height:77vh;
+        padding:.2rem 1.5rem;
+        padding-bottom:5%;
+      }
+      input{
+        height:110%;
+      }
+      .tip-percentage-container{
+        grid-template-columns: 1fr 1fr ;
+      }
+      .output-container{
+        width: 85%;
+        height: 30%;
+        grid-template-rows: 1fr 1fr 1fr;
+      }
+      .input{
+        height: 60%;
+        max-width: 100%;
+      }
+      .output{
+        padding:10%;
+      }
+      button{
+      line-height: 2;
+      height:100%;
+      }
+    }
+    .attribution { 
+      font-size: 11px; text-align: center; 
+      }
+    .attribution a { color: hsl(228, 45%, 44%); }
+  </style>
+
+</head>
+<body>
+
+  <header>
+    <h1>spli</h1>
+    <h1>tter</h1>
+  </header>
+
+  <form class="container">
+    <div class="input">
+      <div class="input-container">
+        <label for="Bill">
+          Bill
+        </label>
+        <input 
+        type="text" 
+        name="Bill" 
+        id="bill"
+        placeholder="0.00"
+        >
+      </div>
+      <div class="input-container">
+        <label for=""> Select Tip % </label>
+      <div class="tip-percentage-container">
+        <div class="tip">5%</div>
+        <div class="tip">10%</div>
+        <div class="tip">15%</div>
+        <div class="tip">25%</div>
+        <div class="tip">50%</div>
+        <input class="tip" type="text" placeholder="Custom"/>
+      </div>
+      </div>
+
+      <div class="input-container" id="people-container">
+        <label for="people">
+          Number of People
+        </label>
+        <span class="" id="people-error"> Number can't be zero</span>
+        <input 
+        type="text" 
+        name="people" 
+        class=""
+        id="people"
+        placeholder="1"
+        >
+      </div>
+    </div>
+    <div class="output-container">
+      <div class="sub-container">
+        Tip Amount
+        <small>/ person</small>
+      </div>
+      <div class="output" id="tip-amount">$0.00</div>
+      <div class="sub-container">
+        Total
+        <small>/ person</small>
+      </div>
+      <div class="output"  id="total-amount">$0.00</div>
+      <button disabled id="reset-button" type="reset">reset</button>
+    </div>
+  </form>
+
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="www.michaelrichardwalker.com">Michael Richard Walker</a>.
+  </div>
+
+  <script>
+  //***************//
+  //Caching the DOM//
+  //***************//
+  let bill_input = document.getElementById("bill");
+  let people_input = document.getElementById("people");
+
+  let tipAmount_divs = document.querySelectorAll(".tip");
+  let resetButton_button = document.getElementById("reset-button");
+
+  let tipAmountOutput_div = document.getElementById("tip-amount");
+  let totalAmountOutput_div = document.getElementById("total-amount");
+
+
+  let values = {
+    bill:0,
+    people:0,
+    tip:0,
+  }
+  let flags = {
+    bill:false,
+    people:false,
+    tip:false
+  };
+
+  function markFlag (key,flagList=flags){
+    flagList[key] = true;
+  }  
+  function storeValue (key,value,flagList=values){
+    flagList[key] = value;
+  }  
+  function updateOutputs(){
+    let flagCheck = !Object.values(flags).includes(false)
+    resetButton_button.disabled = true;
+    if(flagCheck){
+      resetButton_button.disabled = false;
+      let tip = values.bill * (values.tip / 100) / values.people;
+      let total = +((values.bill  / values.people + tip).toFixed(2));
+      tipAmountOutput_div.innerText = "$" + tip.toFixed(2);
+      totalAmountOutput_div.innerText ="$" + total;
+    }
+  }
+
+  [bill_input,people_input]
+  .forEach(ele=>{
+    ele.addEventListener("change",event=>{
+      let target = event.target.id
+      let value = event.target.value
+      markFlag(target);
+      storeValue(target,value)
+      if(value !== ""){
+        let peopleContainer = document.querySelector("#people-container");
+        if(values.people === 0){
+          for( let child of peopleContainer.children){
+            child.classList.add("error");
+            }
+        }else{
+          for( let child of peopleContainer.children){
+            child.classList.remove("error");
+            }
+        }
+        updateOutputs();
+      }
+    })
+  });
+
+  tipAmount_divs.forEach(ele=>{
+    if(ele.tagName === "INPUT"){
+      ele.addEventListener("change" , event =>{
+      let target = event.target;
+      let tipPercentage = event.target.value;
+      tipAmount_divs.forEach(div=>div.classList.remove("active"));
+      target.classList.add("active");
+      markFlag("tip");
+      storeValue("tip",+tipPercentage);
+      updateOutputs();
+    })
+    }else{
+      ele.addEventListener("click" , event =>{
+      let target = event.target;
+      let tipPercentage = event.target.innerText;
+      tipAmount_divs.forEach(div=>div.classList.remove("active"));
+      target.classList.add("active");
+      markFlag("tip");
+      storeValue("tip",+tipPercentage.split("%")[0]);
+      updateOutputs();
+    })
+    }
+  })
+
+  resetButton_button.addEventListener("click",()=>{
+  
+    tipAmount_divs.forEach(div=>div.classList.remove("active"));
+  
+    document
+      .querySelectorAll(".output")
+      .forEach(ele=>ele.innerText = "$0.00");
+
+  })
+
+  </script>
+
+</body>
+</html>
